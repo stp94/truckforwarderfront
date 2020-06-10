@@ -2,6 +2,7 @@
 
   <div id="app">
     <MainMenu> </MainMenu>
+    <router-view></router-view>
 
   </div>
 
@@ -24,6 +25,7 @@
 
   export default {
     components: {MainMenu,
+
     }
   }
 
