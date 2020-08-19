@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueCookies from 'vue-cookies';
 import Panel from "@/views/Panel";
 import Flota from "@/views/Flota";
 import Dealer from "@/views/Dealer";
@@ -7,8 +8,10 @@ import Bank from "@/views/Bank";
 import Zlecenia from "@/views/Zlecenia";
 import Ranking from "@/views/Ranking";
 import Pomoc from "@/views/Pomoc";
+import Account from "@/views/Account";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter, VueCookies);
+
 
   const routes = [
   {
@@ -56,6 +59,12 @@ Vue.use(VueRouter)
       path: '/pomoc',
       name: 'Pomoc',
       component: Pomoc
+    },
+
+    {
+      path: '/account',
+      name: 'Account',
+      component: Account
     },
 
 

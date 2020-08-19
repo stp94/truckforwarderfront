@@ -56,6 +56,13 @@
                                     </router-link>
                                 </b-nav-item>
 
+                                <b-nav-item class="items">
+                                    <router-link to="/account">
+                                        <i class="material-icons" style="font-size: 20px;">help_outline</i>
+                                        <p>Konto</p>
+                                    </router-link>
+                                </b-nav-item>
+
                             </b-navbar-nav>
                         </b-collapse>
             </b-navbar>
@@ -69,7 +76,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped="scss">
     .Header {
         display: inline-flex;
         background-color: #64b5f6;

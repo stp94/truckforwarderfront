@@ -1,22 +1,37 @@
 <template>
     <div class="container-fluid" style="height: 700px;background-color: #e3f2fd;">
-        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid animi aperiam debitis dolor id, optio
-            sapiente! Earum et explicabo, in libero necessitatibus officia sint ut! Aut doloribus eaque enim neque?
-        </div>
-        <div>Ab accusantium aspernatur dicta dignissimos eveniet explicabo facilis hic incidunt ipsum, maxime modi
-            nesciunt officia qui quis quos rerum sed sequi velit veritatis voluptatem! Deleniti numquam perspiciatis
-            quia quisquam repellendus.
-        </div>
-        <div>Dignissimos dolorem est explicabo ipsa quisquam! Ab architecto assumenda ducimus ea eligendi explicabo
-            illum iure, nam necessitatibus, nisi numquam officiis, provident qui quis quos repellat repellendus
-            repudiandae saepe sint sunt!
-        </div>
-        <div>Assumenda deleniti deserunt error harum incidunt iusto mollitia omnis porro, quas quia quod reiciendis
-            veniam. A at expedita labore nemo odit quaerat quam qui, reprehenderit ut voluptates! Accusamus, dolores
-            nulla?
-        </div>
-        <div>Accusantium assumenda culpa dolore dolorem fugiat impedit ipsum magnam mollitia nam odit porro quia, quo
-            repellat tempore ullam. A atque blanditiis eius explicabo harum non nostrum odit reprehenderit rerum sequi.
+        <div>
+            <div class="row">
+                <div class="profile">
+                    <i class="material-icons" style="font-size: 20vw">person</i>
+                    <h1> Witaj {{playerName}}  </h1>
+                    <h2> Twoje fundusze: {{playerCash}} zl </h2>
+
+
+                    <div class="profile-courses">
+                        <p> Ukonczone kursy: {{playerFinishedCourse}} </p>
+                        <p> Nieukonczone kursy: {{playerFailedCourse}} </p>
+
+                    </div>
+
+                </div>
+
+                <div class="profile-additional">
+                    <p> Szybkosc: {{playerSpeed}} </p>
+                    <p> Odpowiedzialnosc: {{playerResponsibility}} </p>
+                    <p> Szacunek: {{playerRespect}} </p>
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+
         </div>
 
     </div>
@@ -25,11 +40,64 @@
 </template>
 
 <script>
+
+    import axios from "axios";
+
 export default {
   name: 'Panel',
-  props: {
-    msg: String
-  }
+
+  methods:{
+    showProfile: function(){
+
+        let userDetailsData;
+        const that = this;
+
+
+        axios.get('http://localhost:8080/session/player/info',{
+            withCredentials: true
+        })
+            .then(function (response) {
+                userDetailsData = response;
+                that.playerName = userDetailsData.data.name;
+                that.playerCash = userDetailsData.data.cash;
+                that.playerSpeed = userDetailsData.data.speed;
+                that.playerResponsibility = userDetailsData.data.responsibility;
+                that.playerRespect = userDetailsData.data.respect;
+                that.playerFinishedCourse = userDetailsData.data.finished_courses;
+                that.playerFailedCourse = userDetailsData.data.failed_courses;
+
+                console.log(this.playerName);
+                console.log(userDetailsData.data.name);
+
+
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+
+
+
+
+
+    }
+  },
+    data(){
+      return{
+          playerName: " ",
+          playerCash: " ",
+          playerSpeed: " ",
+          playerResponsibility: " ",
+          playerRespect: " ",
+          playerFinishedCourse: " ",
+          playerFailedCourse: " "
+
+      }
+    },
+
+    mounted(){
+     this.showProfile()
+    }
 }
 </script>
 
@@ -49,4 +117,30 @@ li {
 a {
   color: #42b983;
 }
+
+.profile{
+    text-align: left;
+    width: 50%;
+
+}
+    .profile, p{
+        font-size: 30px;
+    }
+
+.container-fluid, row{
+    padding: 2%;
+
+}
+
+    .profile-courses > p{
+
+
+        font-size: 1.2rem;
+
+    }
+
+
+
+
+
 </style>
