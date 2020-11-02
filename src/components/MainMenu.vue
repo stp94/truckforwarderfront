@@ -2,7 +2,7 @@
     <div>
         <header class="Header" style="width: 100%;"><img src="@/assets/truckforwarderLOGO.png" width="100" height="100">
             <b-navbar toggleable="lg" class="custom-navbar" width="100%">
-                <b-navbar-brand>TruckForwarder</b-navbar-brand>
+                <b-navbar-brand class="brandText">TruckForwarder</b-navbar-brand>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
                         <b-collapse id="nav-collapse" is-nav>
@@ -98,5 +98,9 @@
 
     nav li i, p{
         color: #1d1d1d;
+    }
+
+    .brandText{
+        font-family: "Arial Black";
     }
 </style>

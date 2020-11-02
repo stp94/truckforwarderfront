@@ -3,13 +3,17 @@
 
         <div class="TrucksMarketTable">
             <div>
-                <b-table class="TrucksTable" selectable responsive striped hover :items="trucksTable" @row-clicked="onRowSelected"></b-table>
+                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="trucksTable" @row-clicked="onRowSelected"> Error Element </b-table>
             </div>
         </div>
 
         <div class="TrucksInfoSection">
-            <div class="TrucksImageLeft"> <img :src="trucksImage">  </div>
-            <div class="TrucksDescriptionRight">  </div>
+            <div class="TrucksImageFirst"> <img :src="trucksImage">  </div>
+            <div class="TrucksDescriptionSecond"> {{trucksDescription}}  </div>
+            <div class="TrucksBuyButtonThird"> <button v-on:click="buyTruck"> Kup </button>  </div>
+            <div class="modal-content" id="ModalWindow">Na pewno?</div>
+
+
         </div>
 
 
@@ -25,9 +29,14 @@
     export default {
         name: "Dealer",
 
+
         data () {
             return {
-               trucksImage:"@/assets/trucktilt.png",
+
+                modal: null,
+                trucksImage: null,
+                trucksDescription: null,
+                trucksData: null,
                 selected: [],
 
 
@@ -43,13 +52,17 @@
             }
         },
         mounted () {
-            let trucksData;
+
             const that = this;
             axios.get('http://localhost:8080/trucks/all',{
                 withCredentials: true
             })
                 .then(function (response) {
-                    trucksData = response;
+
+                    const trucksData = response;
+
+                   // $trucksDataa = trucksData;
+
 
 
                     for(let i=0; i<5; i++)
@@ -88,22 +101,27 @@
                let selectedTruck = this.selected.Typ;
                     switch (selectedTruck) {
                        case 'Plandeka':
-                       this.trucksImage="@trucktilt.png";
+                       this.trucksImage="http://localhost:8081/trucktilt.png";
+                       this.trucksDescription="Opis ciezarowki Plandeka/Firanka";
                            break;
 
                        case 'Standard':
-                           this.trucksImage="@/assets/truckstandard.png";
+                           this.trucksImage="http://localhost:8081/truckstandard.png";
+                           this.trucksDescription="Opis ciezarowki Standard";
                            break;
                        case 'Zestaw':
-                           this.trucksImage="@/assets/truckset.png";
+                           this.trucksImage="http://localhost:8081/truckset.png";
+                           this.trucksDescription="Opis ciezarowki Zestaw";
                            break;
 
                        case 'Cysterna':
-                           this.trucksImage="@/assets/trucktank.png";
+                           this.trucksImage="http://localhost:8081/trucktank.png";
+                           this.trucksDescription="Opis ciezarowki Cysterna";
                            break;
 
                        case 'Wywrotka':
-                           this.trucksImage="@/assets/trucktipper.png";
+                           this.trucksImage="http://localhost:8081/trucktipper.png";
+                           this.trucksDescription="Opis ciezarowki Wywrotka";
                            break;
                        default:
                            console.log(`Sorry, we are out of `);
@@ -113,7 +131,18 @@
 
            },
 
+            buyTruck(){
+                let selectedTruck = this.selected.Typ;
 
+                axios.post("http://localhost:8080/session/player/purchase_truck",
+
+                    {
+                       SelectedTruck: selectedTruck},
+                    {withCredentials: true}
+                )
+
+
+            }
 
         }
 
@@ -141,8 +170,9 @@
 
     }
 
-    .TrucksImageLeft{
+    .TrucksImageFirst{
         padding-right: 5%;
+
     }
 
 </style>

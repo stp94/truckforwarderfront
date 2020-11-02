@@ -1,11 +1,13 @@
 <template>
-    <div class="container-fluid" style="height: 700px;background-color: #e3f2fd;">
+    <div class="container-fluid" style="height: 700px;background-color: white;">
         <div>
             <div class="row">
                 <div class="profile">
-                    <i class="material-icons" style="font-size: 20vw">person</i>
+                    <i class="material-icons" style="font-size: 150px">person</i>
                     <h1> Witaj {{playerName}}  </h1>
                     <h2> Twoje fundusze: {{playerCash}} zl </h2>
+
+
 
 
                     <div class="profile-courses">
@@ -22,9 +24,6 @@
                     <p> Szacunek: {{playerRespect}} </p>
 
                 </div>
-
-
-
             </div>
 
 
@@ -119,25 +118,36 @@ a {
 }
 
 .profile{
+
+
+    width: 20%;
+    display: block;
     text-align: left;
-    width: 50%;
 
 }
     .profile, p{
-        font-size: 30px;
+        font-size: 20px;
     }
+
+
+
+    .profile, h1{
+       font-size: 30px;
+
+    }
+
+    .profile, h2{
+        font-size: 25px;
+
+    }
+
+
 
 .container-fluid, row{
     padding: 2%;
 
 }
 
-    .profile-courses > p{
-
-
-        font-size: 1.2rem;
-
-    }
 
 
 
