@@ -9,7 +9,7 @@
                     <template #cell(Status)="">
 
                         <i class="material-icons" style="font-size: 20px;">{{statusTruck}}</i>
-                    </template>
+                    </template> //test
 
 
                 </b-table>
