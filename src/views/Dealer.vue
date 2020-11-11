@@ -8,16 +8,13 @@
         </div>
 
         <div class="TrucksInfoSection">
-            <div class="TrucksImageFirst"> <img :src="trucksImage">  </div>
+            <div class="TrucksImageFirst" > <img :src="trucksImage">  </div>
             <div class="TrucksDescriptionSecond"> {{trucksDescription}}  </div>
             <div class="TrucksBuyButtonThird"> <button v-on:click="buyTruck"> Kup </button>  </div>
             <div class="modal-content" id="ModalWindow">Na pewno?</div>
 
 
         </div>
-
-
-
 
       </div>
 </template>
