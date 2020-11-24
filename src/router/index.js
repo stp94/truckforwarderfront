@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies';
 import Panel from "@/views/Panel";
@@ -10,7 +11,7 @@ import Ranking from "@/views/Ranking";
 import Pomoc from "@/views/Pomoc";
 import Account from "@/views/Account";
 
-Vue.use(VueRouter, VueCookies);
+Vue.use(VueRouter, VueCookies, Vuex);
 
 
   const routes = [

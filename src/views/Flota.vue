@@ -29,6 +29,10 @@
     import axios from "axios";
 
 
+
+
+
+
     export default {
         name: "Flota",
 
@@ -44,9 +48,6 @@
         },
 
         mounted () {
-
-
-
             axios.get('http://localhost:8080/session/player/bought_trucks',{
                 withCredentials: true
             })
@@ -64,11 +65,8 @@
         },
 
 
-        methods: {
-            getBoughtTrucks(){
-                return this.trucksTableBought;
-            }
-        }
+
+
     }
 </script>
 
