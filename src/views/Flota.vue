@@ -26,8 +26,6 @@
 
 
 
-    import axios from "axios";
-
 
 
 
@@ -48,24 +46,12 @@
         },
 
         mounted () {
-            axios.get('http://localhost:8080/session/player/bought_trucks',{
-                withCredentials: true
-            })
-                .then( response => {
-                    const data = response.data;
-                        for(let i=0; i<data.length; i++) {
-                            this.trucksTableBought.push({ID: data[i].id, Typ: data[i].name, Stan: data[i].life, Dostepnosc: data[i].available})
-                    }
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-
-        },
+            this.trucksTableBought = [];
+            this.$store.commit('update_availableTrucks');
+            this.trucksTableBought = this.$store.state.trucksTableBought;
 
 
-
+        }
 
     }
 </script>

@@ -16,9 +16,74 @@ Vue.use(IconsPlugin);
 Vue.use(Vuex);
 Vue.component('menu-icon', MenuIcon);
 
+import axios from 'axios';
+
+
+const store = new Vuex.Store({
+  state: {
+    trucksTableBought: [],
+    orders: []
+  },
+  mutations: {
+    update_availableTrucks(state) {
+      axios.get('http://localhost:8080/session/player/bought_trucks', {
+        withCredentials: true
+      })
+          .then(response => {
+            const data = response.data;
+            state.trucksTableBought=[];
+            for (let i = 0; i < data.length; i++) {
+              state.trucksTableBought.push({
+                ID: data[i].id,
+                Typ: data[i].name,
+                Stan: data[i].life,
+                Dostepnosc: data[i].available
+              })
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+      //state.trucksTableBought=this.trucksTableBought;
+    },
+
+    update_orders(state){
+      axios.get('http://localhost:8080/order/vieworders',{
+        withCredentials: true
+      })
+          .then( response => {
+            const data = response.data;
+            state.orders = [];
+            for(let i=0; i<data.length; i++) {
+              state.orders.push({ID: data[i].id , Poczatek: data[i].source, Koniec: data[i].destination,
+                Odleglosc: data[i].distance, Rodzaj: data[i].type, Ilosc: data[i].size, Dlugosc: data[i].length,
+                Szerokosc: data[i].width, Wysokosc: data[i].height, Waga: data[i].weight, Pojemnosc: data[i].capacity,
+                Opis: data[i].desc, Wynagrodzenie: data[i].reward, Klient: data[i].client})
+            }
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+
+    }
+
+  },
+
+
+  getters: {
+    getAvailableTrucks(){
+      return this.state.trucksTableBought;
+
+    }
+  }
+
+});
 
 new Vue({
   router,
+  store,
 
   render: h => h(App)
 }).$mount('#app')
