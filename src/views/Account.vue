@@ -1,7 +1,5 @@
 <template>
     <div class="login_panel">
-
-
             <div>
                 <label for="login">Login:</label><br>
                 <input id="login" v-model="username">
@@ -9,15 +7,8 @@
                 <input type="text" id="password" v-model="password"><br>
 
                 <button v-on:click="submitPrincipal()" >Submit</button>
-
                 <button v-on:click="showPrincipalData()"> showContent </button>
-
-
-
             </div>
-
-
-
     </div>
 </template>
 
@@ -34,15 +25,10 @@
                 //console.log(this.username, this.password);
 
                 let url = new URL('http://localhost:8080/login'); // or construct from window.location
-
                 let params = new URLSearchParams(url.search.slice(1));
-
-
 
                 params.append('username',this.username);
                 params.set('password',this.password);
-
-
 
                 axios.post('http://localhost:8080/login',params,{
                     withCredentials: true,
@@ -51,8 +37,6 @@
                 }).then(function(response){
                     console.log(response.data);
                 });
-
-
             },
 
 
@@ -64,15 +48,12 @@
                 // params.append('username',this.username);
                 // params.set('password',this.password);
 
-
                 axios.get('http://localhost:8080/session/player/info',{
                     withCredentials: true
                 })
                     .then(function (response) {
                         userDetailsData = response;
                         console.log(userDetailsData);
-
-
                     })
                     .catch(function (error) {
                         // handle error
@@ -81,9 +62,7 @@
                     .then(function () {
                         // always executed
                     });
-
             }
-
         },
 
 
@@ -92,10 +71,8 @@
 
                 username: "",
                 password: "",
-
             }
         }
-
     }
 
 
