@@ -19,25 +19,25 @@
                     {{selectedOrder.Poczatek}} -> {{selectedOrder.Koniec}}
                 </div>
 
-<!--                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="filteredTrucksToOrders" :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelected"> Error Element-->
-<!--                    <template #cell(Status)="itemRow">-->
-<!--                        <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>-->
-<!--                        <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>-->
-<!--                    </template>-->
+                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="filteredTrucksToOrders" :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelectedModal"> Error Element
+                    <template #cell(Status)="itemRow">
+                        <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
+                        <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
+                    </template>
 
-<!--                    <template #cell(.)="itemRow">-->
-<!--                        <img v-if="itemRow.item.Typ==='Plandeka'" src="http://localhost:8081/trucktilt.png" class="iconTruckTable">-->
-<!--                        <img v-if="itemRow.item.Typ==='Standard'" src="http://localhost:8081/truckstandard.png" class="iconTruckTable">-->
-<!--                        <img v-if="itemRow.item.Typ==='Zestaw'" src="http://localhost:8081/truckset.png" class="iconTruckTable">-->
-<!--                        <img v-if="itemRow.item.Typ==='Cysterna'" src="http://localhost:8081/trucktank.png" class="iconTruckTable">-->
-<!--                        <img v-if="itemRow.item.Typ==='Wywrotka'" src="http://localhost:8081/trucktipper.png" class="iconTruckTable">-->
-<!--                    </template>-->
-<!--                </b-table>-->
+                    <template #cell(.)="itemRow">
+                        <img v-if="itemRow.item.Typ==='Plandeka'" src="http://localhost:8081/trucktilt.png" class="iconTruckTable">
+                        <img v-if="itemRow.item.Typ==='Standard'" src="http://localhost:8081/truckstandard.png" class="iconTruckTable">
+                        <img v-if="itemRow.item.Typ==='Zestaw'" src="http://localhost:8081/truckset.png" class="iconTruckTable">
+                        <img v-if="itemRow.item.Typ==='Cysterna'" src="http://localhost:8081/trucktank.png" class="iconTruckTable">
+                        <img v-if="itemRow.item.Typ==='Wywrotka'" src="http://localhost:8081/trucktipper.png" class="iconTruckTable">
+                    </template>
+                </b-table>
 
 
 
-                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Close Me</b-button>
-                <b-button class="mt-2" variant="outline-warning" block @click="toggleModal">Toggle Me</b-button>
+                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Anuluj</b-button>
+                <b-button class="mt-2" variant="outline-warning" block @click="toggleModal">Rozpocznij</b-button>
             </b-modal>
 
         </div>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import Flota from "@/views/Flota";
+
 
     export default {
         name: "Zlecenia",
@@ -67,6 +67,7 @@
                     {key: "ID"},
                     {key: "Typ"},
                     {key: "Stan"},
+                    {key: "."}
                 ],
                 filteredTrucksToOrders: []
             }
@@ -80,13 +81,28 @@
         methods: {
 
             onRowSelected(orderTable){
-                this.BoughtTrucks = Flota.data().trucksTableBought;
+                this.BoughtTrucks = this.$store.state.trucksTableBought;
                 this.selectedOrder = orderTable;
+                this.filteredTrucksToOrders = [];
+
+                for(let i=0;i<this.$store.state.trucksTableBought.length;i++)
+                {
+                   {
+                        this.filteredTrucksToOrders.push({
+                            ID: this.$store.state.trucksTableBought[i].ID,
+                            Typ: this.$store.state.trucksTableBought[i].Typ,
+                            Stan: this.$store.state.trucksTableBought[i].Stan,
+
+                        })
+                    }
+                }
 
 
 
                 this.$refs['my-modal'].show()
-            }
+            },
+
+            onRowSelectedModal(){}
         },
 
 
@@ -117,6 +133,11 @@
 
     .truck-details-label{
         font-style: oblique;
+    }
+
+    .iconTruckTable{
+        max-width: 100%;
+        max-height: 100%;
     }
 
 
