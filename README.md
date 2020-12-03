@@ -1,24 +1,24 @@
 # truckforwarderfront
 
-## Project setup
-```
-npm install
-```
+Frontend layer of speditor simulator.
+Work in progress
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+<b>The images represent the current state of the application which may change</b>
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/1.png)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+mobile edit:
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/1m.png)
+
+
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/2.png)
+
+mobile edit:
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/2m.png)
+
+
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/3.png)
+
+mobile edit:
+![alt text](https://github.com/stp94/truckforwarderfront/blob/working_on_navbar/tfimages/3m.png)
