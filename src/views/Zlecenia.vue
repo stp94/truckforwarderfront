@@ -19,7 +19,7 @@
                     {{selectedOrder.Poczatek}} -> {{selectedOrder.Koniec}}
                 </div>
 
-                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="filteredTrucksToOrders" :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelectedModal"> Error Element
+                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="filteredTrucksToOrders" :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelectedTruck"> Error Element
                     <template #cell(Status)="itemRow">
                         <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
                         <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
@@ -37,7 +37,8 @@
 
 
                 <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Anuluj</b-button>
-                <b-button class="mt-2" variant="outline-warning" block @click="toggleModal">Rozpocznij</b-button>
+                <b-button v-if="filteredTrucksToOrders.length>0" class="mt-2" variant="outline-warning" block @click="toggleModal">Rozpocznij</b-button>
+                <b-button v-else class="mt-2" variant="outline-warning"  block @click="toggleModalEmpty">Brak odpowiednich pojazdow</b-button>
             </b-modal>
 
         </div>
@@ -47,6 +48,7 @@
 </template>
 
 <script>
+
 
 
     export default {
@@ -77,6 +79,7 @@
             this.$store.commit('update_orders');
             this.$store.commit('update_availableTrucks');
             this.orderTable = this.$store.state.orders;
+
         },
         methods: {
 
@@ -85,11 +88,13 @@
                 this.selectedOrder = orderTable;
                 this.filteredTrucksToOrders = [];
 
-                for(let i=0;i<this.$store.state.trucksTableBought.length;i++){
-                    if (this.$store.state.trucksTableBought[i].width <= this.selectedOrder.width &&
-                        this.$store.state.trucksTableBought[i].height <= this.selectedOrder.height &&
-                        this.&store.state.trucksTableBought[i].)
+                // Below comparing trucks to selected orders with multiple options of loading
 
+                for(let i=0;i<this.$store.state.trucksTableBought.length;i++){
+                    if(
+                        (this.selectedOrder.Rodzaj !== "liquid" && this.selectedOrder.Ilosc*this.selectedOrder.Dlugosc<=this.$store.state.trucksTableBought[i].Dlugosc && this.selectedOrder.Wysokosc <= this.$store.state.trucksTableBought[i].Wysokosc &&  this.selectedOrder.Waga<=this.$store.state.trucksTableBought[i].Waga) ||
+                        (this.selectedOrder.Rodzaj !== "liquid" && this.selectedOrder.Ilosc/2*this.selectedOrder.Dlugosc <= this.$store.state.trucksTableBought[i].Dlugosc && this.selectedOrder.Wysokosc*2 <= this.$store.state.trucksTableBought[i].Wysokosc && this.selectedOrder.Waga<=this.$store.state.trucksTableBought[i].Waga)
+                    )
 
                         {
                             this.filteredTrucksToOrders.push({
@@ -99,17 +104,26 @@
 
                             })
                         }
+                    else (console.log("empty"))
                 }
-
-
-
                 this.$refs['my-modal'].show()
             },
 
-            onRowSelectedModal(){},
+            onRowSelectedTruck(filteredTrucksToOrders){
+
+            },
 
             toggleModal(){
                 console.log("here");
+                this.$refs['my-modal'].hide();
+                this.$toast.open("Transport rozpoczety");
+            },
+
+            toggleModalEmpty(){
+                this.$toast.warning("Wybierz inna trase lub odwiedz Dealera")
+            },
+
+            hideModal(){
                 this.$refs['my-modal'].hide()
             }
         },

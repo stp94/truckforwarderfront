@@ -2,19 +2,24 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import MenuIcon from 'vue-material-design-icons/Menu.vue';
+import MenuIcon from 'vue-material-design-icons/Menu.vue'
+import VueToast from 'vue-toast-notification';
 
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+
 import router from './router'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuex);
-Vue.component('menu-icon', MenuIcon);
+Vue.use(VueToast);
+Vue.component('menu-icon', MenuIcon, VueToast);
 
 import axios from 'axios';
 
@@ -37,7 +42,11 @@ const store = new Vuex.Store({
                 ID: data[i].id,
                 Typ: data[i].name,
                 Stan: data[i].life,
-                Dostepnosc: data[i].available
+                Dostepnosc: data[i].available,
+                  Dlugosc: data[i].length,
+                  Szerokosc: data[i].width,
+                  Wysokosc: data[i].height,
+                  Waga: data[i].weight
               })
             }
           })
@@ -84,6 +93,8 @@ const store = new Vuex.Store({
 new Vue({
   router,
   store,
+
+
 
   render: h => h(App)
 }).$mount('#app')
