@@ -85,16 +85,20 @@
                 this.selectedOrder = orderTable;
                 this.filteredTrucksToOrders = [];
 
-                for(let i=0;i<this.$store.state.trucksTableBought.length;i++)
-                {
-                   {
-                        this.filteredTrucksToOrders.push({
-                            ID: this.$store.state.trucksTableBought[i].ID,
-                            Typ: this.$store.state.trucksTableBought[i].Typ,
-                            Stan: this.$store.state.trucksTableBought[i].Stan,
+                for(let i=0;i<this.$store.state.trucksTableBought.length;i++){
+                    if (this.$store.state.trucksTableBought[i].width <= this.selectedOrder.width &&
+                        this.$store.state.trucksTableBought[i].height <= this.selectedOrder.height &&
+                        this.&store.state.trucksTableBought[i].)
 
-                        })
-                    }
+
+                        {
+                            this.filteredTrucksToOrders.push({
+                                ID: this.$store.state.trucksTableBought[i].ID,
+                                Typ: this.$store.state.trucksTableBought[i].Typ,
+                                Stan: this.$store.state.trucksTableBought[i].Stan,
+
+                            })
+                        }
                 }
 
 
@@ -102,7 +106,12 @@
                 this.$refs['my-modal'].show()
             },
 
-            onRowSelectedModal(){}
+            onRowSelectedModal(){},
+
+            toggleModal(){
+                console.log("here");
+                this.$refs['my-modal'].hide()
+            }
         },
 
 
