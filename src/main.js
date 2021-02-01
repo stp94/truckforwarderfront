@@ -23,11 +23,13 @@ Vue.component('menu-icon', MenuIcon, VueToast);
 
 import axios from 'axios';
 
-
 const store = new Vuex.Store({
   state: {
     trucksTableBought: [],
-    orders: []
+    orders: [],
+    playerDetails: [],
+    courses:[],
+      finishedCourses:[]
   },
   mutations: {
     update_availableTrucks(state) {
@@ -76,7 +78,77 @@ const store = new Vuex.Store({
             console.log(error);
           })
 
-    }
+    },
+
+    update_playerDetails(state){
+        axios.get('http://localhost:8080/session/player/info',{
+            withCredentials: true
+        })
+            .then(function (response) {
+                const userDetailsData = response.data;
+                state.playerDetails = [];
+
+                    state.playerDetails.push({playerName: userDetailsData.name, playerCash: userDetailsData.cash, playerSpeed: userDetailsData.speed,
+                    playerResponsibility: userDetailsData.responsibility, playerRespect: userDetailsData.respect, playerFinishedCourse: userDetailsData.finished_courses,
+                    playerFailedCourse: userDetailsData.failed_courses, })
+
+                // that.playerName = userDetailsData.data.name;
+                // that.playerCash = userDetailsData.data.cash;
+                // that.playerSpeed = userDetailsData.data.speed;
+                // that.playerResponsibility = userDetailsData.data.responsibility;
+                // that.playerRespect = userDetailsData.data.respect;
+                // that.playerFinishedCourse = userDetailsData.data.finished_courses;
+                // that.playerFailedCourse = userDetailsData.data.failed_courses;
+
+                console.log(userDetailsData.name);
+
+
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+
+    },
+
+
+
+    update_courses(state){
+        axios.get('http://localhost:8080/session/course/viewcourses',{
+            withCredentials: true
+        })
+            .then( response => {
+                const data = response.data;
+                state.courses = [];
+                for(let i=0; i<data.length; i++) {
+                    if(data[i].progress<100){
+                        state.courses.push({ID: data[i].id , Zrodlo: data[i].source, Cel: data[i].destination, Typ: data[i].name, nr_Zlecenia: data[i].idorder, Czas: data[i].duration, Progress: data[i].progress
+                        })
+                    }
+                    else {
+                        state.finishedCourses.push({ID: data[i].id , Zrodlo: data[i].source, Cel: data[i].destination, Typ: data[i].name, nr_Zlecenia: data[i].idorder, Czas: data[i].duration, Progress: data[i].progress
+                        })
+                    }
+
+                }
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+
+
+    },
+
+
+
+
+
+
+
+
+
+
 
   },
 
@@ -86,9 +158,16 @@ const store = new Vuex.Store({
       return this.state.trucksTableBought;
 
     }
-  }
+  },
+    actions:{
+       generateCourses(commit){
+           commit('update_courses');
+       }
+    }
 
 });
+
+
 
 new Vue({
   router,

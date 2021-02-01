@@ -11,10 +11,10 @@
                 <div class="col-md-6">
                     <div class="profile-head">
                         <h5>
-                           {{playerName}}
+                           {{this.$store.state.playerDetails[0].playerName}}
                         </h5>
                         <h6>
-                           Twoje fundusze: {{playerCash}}
+                           Twoje fundusze: {{this.$store.state.playerDetails[0].playerCash}}
                         </h6>
                         <p class="proile-rating">RANKINGS : <span>8/10</span></p>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -36,24 +36,30 @@
                     <div class="profile-work">
                         <p>Umiejętności</p>
                         <a href="">Reakcja:</a><br/>
-                        <a href=""><b-progress :value="playerSpeed" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
+                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerSpeed" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
                         <a href="">Odpowiedzialność:</a><br/>
-                        <a href=""><b-progress :value="playerResponsibility" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
+                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerResponsibility" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
                         <a href="">Szacunek:</a><br/>
-                        <a href=""><b-progress :value="playerRespect" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
+                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerRespect" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
 
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="tab-content profile-tab" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <ul class ="courses-list"  v-for="item in this.$store.state.courses" :key="item.ID" >
+                                <li> {{item.ID}} </li>
+                                <li> {{item.Zrodlo}}</li>
+                                <li> {{item.Cel}}</li>
+                                <li class="bar"> <b-progress :value="item.Progress" class="w-25"></b-progress> </li>
 
+                            </ul>
 
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="row">
 
-
+                            dsdsd
 
                             </div>
                         </div>
@@ -68,63 +74,23 @@
 
 <script>
 
-    import axios from "axios";
+
 
 export default {
   name: 'Panel',
 
-  methods:{
-    showProfile: function(){
-
-        let userDetailsData;
-        const that = this;
-
-
-        axios.get('http://localhost:8080/session/player/info',{
-            withCredentials: true
-        })
-            .then(function (response) {
-                userDetailsData = response;
-                that.playerName = userDetailsData.data.name;
-                that.playerCash = userDetailsData.data.cash;
-                that.playerSpeed = userDetailsData.data.speed;
-                that.playerResponsibility = userDetailsData.data.responsibility;
-                that.playerRespect = userDetailsData.data.respect;
-                that.playerFinishedCourse = userDetailsData.data.finished_courses;
-                that.playerFailedCourse = userDetailsData.data.failed_courses;
-
-                console.log(this.playerName);
-                console.log(userDetailsData.data.name);
-
-
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-
-
-
-
-
-    }
-  },
     data(){
+
       return{
-          playerName: " ",
-          playerCash: " ",
-          playerSpeed: " ",
-          playerResponsibility: " ",
-          playerRespect: " ",
-          playerFinishedCourse: " ",
-          playerFailedCourse: " "
 
       }
     },
+    create(){
+        this.generateProgressBars();
+    },
 
-    mounted(){
-     this.showProfile()
-    }
+
+
 }
 </script>
 
@@ -226,6 +192,25 @@ export default {
     .profile-tab p{
         font-weight: 600;
         color: #0062cc;
+    }
+
+    .courses-list{
+
+
+
+    }
+
+    .courses-list li {
+      display: inline-block;
+        padding-left: 5pt;
+    }
+
+    .courses-list-progressbar{
+        width: 25%;
+    }
+
+    .bar{
+        width: 70%;
     }
 
 

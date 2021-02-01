@@ -15,16 +15,15 @@ Vue.use(VueRouter, VueCookies, Vuex);
 
 
   const routes = [
-  {
-    path: '/',
-    name: 'Panel',
-    component: Panel
-  },
+
   // {   <---- Daj znac czym sie to rozni od tej wersji wyzej
   //   path: '/about',
   //   name: 'About',
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // },
+
+
+
     {
       path: '/panel',
       name: 'Panel',
@@ -62,16 +61,15 @@ Vue.use(VueRouter, VueCookies, Vuex);
       component: Pomoc
     },
 
+
     {
       path: '/account',
       name: 'Account',
       component: Account
     },
-
-
-
-
   ];
+
+
 
 const router = new VueRouter({
   routes

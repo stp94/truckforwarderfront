@@ -18,13 +18,11 @@
                 Zlecenie nr: {{selectedOrder.ID}} <br>
                     {{selectedOrder.Poczatek}} -> {{selectedOrder.Koniec}}
                 </div>
-
                 <b-table class="TrucksTable" selectable responsive="true" striped hover :items="filteredTrucksToOrders" :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelectedTruck"> Error Element
                     <template #cell(Status)="itemRow">
                         <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
                         <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
                     </template>
-
                     <template #cell(.)="itemRow">
                         <img v-if="itemRow.item.Typ==='Plandeka'" src="http://localhost:8081/trucktilt.png" class="iconTruckTable">
                         <img v-if="itemRow.item.Typ==='Standard'" src="http://localhost:8081/truckstandard.png" class="iconTruckTable">
@@ -33,11 +31,8 @@
                         <img v-if="itemRow.item.Typ==='Wywrotka'" src="http://localhost:8081/trucktipper.png" class="iconTruckTable">
                     </template>
                 </b-table>
-
-
-
                 <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Anuluj</b-button>
-                <b-button v-if="filteredTrucksToOrders.length>0" class="mt-2" variant="outline-warning" block @click="toggleModal">Rozpocznij</b-button>
+                <b-button v-if="filteredTrucksToOrders.length>0" class="mt-2" variant="outline-warning" block @click="toggleModalStartMission">Rozpocznij</b-button>
                 <b-button v-else class="mt-2" variant="outline-warning"  block @click="toggleModalEmpty">Brak odpowiednich pojazdow</b-button>
             </b-modal>
 
@@ -49,8 +44,7 @@
 
 <script>
 
-
-
+    import axios from "axios";
     export default {
         name: "Zlecenia",
         data () {
@@ -71,7 +65,8 @@
                     {key: "Stan"},
                     {key: "."}
                 ],
-                filteredTrucksToOrders: []
+                filteredTrucksToOrders: [{key: "Dostepnosc"}],
+                selectedTruck: []
             }
         },
         mounted () {
@@ -101,22 +96,55 @@
                                 ID: this.$store.state.trucksTableBought[i].ID,
                                 Typ: this.$store.state.trucksTableBought[i].Typ,
                                 Stan: this.$store.state.trucksTableBought[i].Stan,
+                                Dostepnosc: this.$store.state.trucksTableBought[i].Dostepnosc
 
                             })
                         }
-                    else (console.log("empty"))
+
                 }
-                this.$refs['my-modal'].show()
+                this.$refs['my-modal'].show();
+
+                    if(this.filteredTrucksToOrders.length===0){
+                        this.$toast.warning("Nie masz odpowiednich pojazdow")
+                    }
             },
 
             onRowSelectedTruck(filteredTrucksToOrders){
-
+                this.selectedTruck = filteredTrucksToOrders;
+                console.log(this.selectedTruck);
             },
 
-            toggleModal(){
-                console.log("here");
-                this.$refs['my-modal'].hide();
-                this.$toast.open("Transport rozpoczety");
+            toggleModalStartMission(){
+
+                console.log(this.selectedTruck.Dostepnosc)
+
+                if(this.selectedTruck.Dostepnosc == true){
+                    this.$refs['my-modal'].hide();
+
+                    console.log(this.selectedTruck.ID);
+                    console.log(this.selectedOrder.ID);
+                    console.log(this.selectedOrder.Odleglosc)
+
+                    axios.post("http://localhost:8080/session/course/new",
+                        {
+                            selectedOrderId: this.selectedOrder.ID,
+                            selectedTruckId: this.selectedTruck.ID,
+                            Distance: this.selectedOrder.Odleglosc},
+                        {withCredentials: true});
+
+
+                    axios.post("http://localhost:8080/session/player/changeAvailability",
+                        {
+                            selectedTruckId: this.selectedTruck.ID,
+                            Distance: this.selectedOrder.Odleglosc},
+                        {withCredentials: true});
+
+
+
+                    this.$toast.open("Transport rozpoczety");
+                }
+                else (this.$toast.warning("Pojazd zajety!"))
+
             },
 
             toggleModalEmpty(){

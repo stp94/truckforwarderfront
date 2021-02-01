@@ -6,17 +6,18 @@
                 <b-table class="TrucksTable" selectable responsive="true" striped hover :items="trucksTable" @row-clicked="onRowSelected"> Error Element </b-table>
             </div>
         </div>
+        <div class="row">
 
-        <div class="TrucksInfoSection">
-            <div class="TrucksImageFirst" > <img :src="trucksImage">  </div>
-            <div class="TrucksDescriptionSecond"> {{trucksDescription}}  </div>
-            <div class="TrucksBuyButtonThird"> <button v-on:click="buyTruck"> Kup </button>  </div>
-            <div class="modal-content" id="ModalWindow">Na pewno?</div>
+                <div class="col-md-4" > <img :src="trucksImage">  </div>
+                <div class="col-md-4"> {{trucksDescription}}  </div>
+                <div class="col-md-2"> <button v-on:click="buyTruck"> Kup </button>  </div>
+
+
 
 
         </div>
 
-      </div>
+    </div>
 </template>
 
 <script>
@@ -99,7 +100,9 @@
                     switch (selectedTruck) {
                        case 'Plandeka':
                        this.trucksImage="http://localhost:8081/trucktilt.png";
-                       this.trucksDescription="Opis ciezarowki Plandeka/Firanka";
+                       this.trucksDescription="Jeden z najpopularniejszych rodzajów samochodów ciężarowych.\n" +
+                           "Bardzo uniwersalny, pozwala na wygodny załadunek z każdej strony i bezpieczny transport.\n" +
+                           "Dostępna wersja cechuje się również nieco mniejszymi rozmiarami.";
                            break;
 
                        case 'Standard':
@@ -131,12 +134,17 @@
             buyTruck(){
                 let selectedTruck = this.selected.Typ;
 
-                axios.post("http://localhost:8080/session/player/purchase_truck",
+                if (this.selected.Cena <= this.$store.state.playerDetails[0].playerCash){
+                    axios.post("http://localhost:8080/session/player/purchase_truck",
+                        {
+                            SelectedTruck: selectedTruck},
+                        {withCredentials: true}
+                    )
+                    this.$toast.open("Zakupiono pojazd")
+                }
+                else
+                    this.$toast.warning("Brak srodkow");
 
-                    {
-                       SelectedTruck: selectedTruck},
-                    {withCredentials: true}
-                )
 
 
             }
@@ -165,11 +173,20 @@
     .TrucksInfoSection{
         display: inline-flex;
 
+
     }
 
     .TrucksImageFirst{
         padding-right: 5%;
+        width: 30%;
+    }
 
+    .TrucksDescriptionSecond{
+        width: 30%;
+    }
+
+    .TrucksBuyButtonThird{
+        width: 30%;
     }
 
 </style>
