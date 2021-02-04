@@ -4,9 +4,9 @@
                 <label for="login">Login:</label><br>
                 <input id="login" v-model="username">
                 <label for="password">Haslo:</label><br>
-                <input type="text" id="password" v-model="password"><br>
-                <button v-on:click="submitPrincipal()" >Submit</button>
-                <button v-on:click="showPrincipalData()"> showContent </button>
+                <input type="password" id="password" v-model="password"><br>
+                <button v-on:click="submitPrincipal()" >Zaloguj</button>
+
             </div>
     </div>
 </template>

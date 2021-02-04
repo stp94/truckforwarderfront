@@ -1,120 +1,143 @@
 <template>
     <div class="container emp-profile">
-        <form method="post">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="profile-img">
-                        <img src="@/assets/call-center-worker.png" alt=""/>
-
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="profile-head">
-                        <h5>
-                           {{this.$store.state.playerDetails[0].playerName}}
-                        </h5>
-                        <h6>
-                           Twoje fundusze: {{this.$store.state.playerDetails[0].playerCash}}
-                        </h6>
-                        <p class="proile-rating">RANKINGS : <span>8/10</span></p>
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">W trakcie</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Ukończone</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Ustawienia"/>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="@/assets/call-center-worker.png" alt=""/>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="profile-work">
-                        <p>Umiejętności</p>
-                        <a href="">Reakcja:</a><br/>
-                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerSpeed" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
-                        <a href="">Odpowiedzialność:</a><br/>
-                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerResponsibility" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
-                        <a href="">Szacunek:</a><br/>
-                        <a href=""><b-progress :value="this.$store.state.playerDetails[0].playerRespect" :max="100" class="mb-3" show-value show-progress animated></b-progress></a><br/>
-
-                    </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5>
+                        {{this.$store.state.playerDetails[0].playerName}}
+                    </h5>
+                    <h6>
+                        Twoje fundusze: {{this.$store.state.playerDetails[0].playerCash}}
+                    </h6>
+                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
                 </div>
-                <div class="col-md-8">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <ul class ="courses-list"  v-for="item in this.$store.state.courses" :key="item.ID" >
-                                <li> {{item.ID}} </li>
-                                <li> {{item.Zrodlo}}</li>
-                                <li> {{item.Cel}}</li>
-                                <li class="bar"> <b-progress :value="item.Progress" class="w-25"></b-progress> </li>
+            </div>
 
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p>Umiejętności</p>
+                    <a href="">Reakcja:</a><br/>
+                    <a href="">
+                        <b-progress :value="this.$store.state.playerDetails[0].playerSpeed" :max="100" class="mb-3"
+                                    show-value show-progress animated></b-progress>
+                    </a><br/>
+                    <a href="">Odpowiedzialność:</a><br/>
+                    <a href="">
+                        <b-progress :value="this.$store.state.playerDetails[0].playerResponsibility" :max="100"
+                                    class="mb-3" show-value show-progress animated></b-progress>
+                    </a><br/>
+                    <a href="">Szacunek:</a><br/>
+                    <a href="">
+                        <b-progress :value="this.$store.state.playerDetails[0].playerRespect" :max="100" class="mb-3"
+                                    show-value show-progress animated></b-progress>
+                    </a><br/>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+                <div id="tabs" class="container">
+                    <div class="tabs">
+                        <b-button class="tabButton" v-on:click="activetab=1"
+                                  v-bind:class="[ activetab === 1 ? 'active' : '' ]">Aktualne kursy
+                        </b-button>
+                        <b-button class="tabButton" v-on:click="activetab=2"
+                                  v-bind:class="[ activetab === 2 ? 'active' : '' ]">Ukończone kursy
+                        </b-button>
+                    </div>
+                    <div class="content">
+                        <div v-if="activetab === 1" class="tabcontent">
+                            <ul class="courses-list">
+                                <b-list-group horizontal class="courses-list-element" id="currentCourses"
+                                              v-for="item in this.$store.state.courses" :key="item.ID">
+                                    <b-list-group-item> {{item.ID}}</b-list-group-item>
+                                    <b-list-group-item> {{item.Zrodlo}}</b-list-group-item>
+                                    <b-list-group-item> {{item.Cel}}</b-list-group-item>
+                                    <b-list-group-item class="bar">
+                                        <b-progress height="2rem" :value="item.Progress" show-progress
+                                                    class="w-100"></b-progress>
+                                    </b-list-group-item>
+                                </b-list-group>
                             </ul>
 
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="row">
-
-                            dsdsd
-
-                            </div>
+                        <div v-if="activetab === 2" class="tabcontent">
+                            <ul class="courses-list">
+                                <b-list-group horizontal class="courses-list-element"
+                                              v-for="item in this.$store.state.finishedCourses" :key="item.ID">
+                                    <b-list-group-item> {{item.ID}}</b-list-group-item>
+                                    <b-list-group-item> {{item.Zrodlo}}</b-list-group-item>
+                                    <b-list-group-item> {{item.Cel}}</b-list-group-item>
+                                    <b-list-group-item> nr {{item.nr_Zlecenia}}</b-list-group-item>
+                                </b-list-group>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-
-
 </template>
 
 <script>
 
 
+    export default {
+        name: 'Panel',
+        data() {
+            return {
+                activetab: 1,
+                timer: '',
+            }
+        },
+        create() {
+            this.generateProgressBars();
+        },
+        method: {
+            showUnfinished() {
+                document.getElementById("courses-list").setAttribute("display", "none");
+            },
+        },
 
-export default {
-  name: 'Panel',
-
-    data(){
-
-      return{
-
-      }
-    },
-    create(){
-        this.generateProgressBars();
-    },
-
-
-
-}
+        mounted() {
+            this.$store.commit('update_courses');
+            this.timer = setInterval(document.getElementsById("currentCourses").window.location.reload, 1000);
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 
-    body{
+    body {
         background: -webkit-linear-gradient(left, #3931af, #00c6ff);
     }
-    .emp-profile{
+
+    .emp-profile {
         padding: 3%;
         margin-top: 3%;
         margin-bottom: 3%;
         border-radius: 0.5rem;
         background: #fff;
     }
-    .profile-img{
+
+    .profile-img {
         text-align: center;
     }
-    .profile-img img{
+
+    .profile-img img {
         width: 70%;
         height: 100%;
     }
+
     .profile-img .file {
         position: relative;
         overflow: hidden;
@@ -125,97 +148,89 @@ export default {
         font-size: 15px;
         background: #212529b8;
     }
+
     .profile-img .file input {
         position: absolute;
         opacity: 0;
         right: 0;
         top: 0;
     }
-    .profile-head h5{
+
+    .profile-head h5 {
         color: #333;
     }
-    .profile-head h6{
+
+    .profile-head h6 {
         color: #0062cc;
     }
-    .profile-edit-btn{
-        border: none;
-        border-radius: 1.5rem;
-        width: 70%;
-        padding: 2%;
-        font-weight: 600;
-        color: #6c757d;
-        cursor: pointer;
-    }
-    .proile-rating{
+
+    .proile-rating {
         font-size: 12px;
         color: #818182;
         margin-top: 5%;
     }
-    .proile-rating span{
+
+    .proile-rating span {
         color: #495057;
         font-size: 15px;
         font-weight: 600;
     }
-    .profile-head .nav-tabs{
-        margin-bottom:5%;
-    }
-    .profile-head .nav-tabs .nav-link{
-        font-weight:600;
-        border: none;
-    }
-    .profile-head .nav-tabs .nav-link.active{
-        border: none;
-        border-bottom:2px solid #0062cc;
-    }
-    .profile-work{
+
+    .profile-work {
         padding: 14%;
         margin-top: -15%;
     }
-    .profile-work p{
+
+    .profile-work p {
         font-size: 12px;
         color: #818182;
         font-weight: 600;
         margin-top: 10%;
     }
-    .profile-work a{
+
+    .profile-work a {
         text-decoration: none;
         color: #495057;
         font-weight: 600;
         font-size: 14px;
     }
-    .profile-work ul{
+
+    .profile-work ul {
         list-style: none;
     }
-    .profile-tab label{
+
+    .profile-tab label {
         font-weight: 600;
     }
-    .profile-tab p{
+
+    .profile-tab p {
         font-weight: 600;
         color: #0062cc;
     }
 
-    .courses-list{
-
-
-
+    .courses-list {
+        list-style: none;
+        align-items: center;
     }
 
     .courses-list li {
-      display: inline-block;
-        padding-left: 5pt;
+        color: #00c6ff;
+        text-align: left;
+        display: inline;
     }
 
-    .courses-list-progressbar{
-        width: 25%;
-    }
-
-    .bar{
-        width: 70%;
+    .courses-list .bar {
+        width: 100%
     }
 
 
+    .tabButton {
+
+        padding-left: 2%;
+        margin-left: 5%;
 
 
+    }
 
 
 </style>

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies';
-import Panel from "@/views/Panel";
+
 import Flota from "@/views/Flota";
 import Dealer from "@/views/Dealer";
 import Bank from "@/views/Bank";
@@ -27,7 +27,7 @@ Vue.use(VueRouter, VueCookies, Vuex);
     {
       path: '/panel',
       name: 'Panel',
-      component: Panel
+      component: () => import(/* webpackChunkName: "panel" */ '../views/Panel.vue')
     },
 
     {
