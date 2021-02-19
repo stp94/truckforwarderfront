@@ -1,9 +1,9 @@
 <template>
 
     <div id="app">
-        <MainMenu></MainMenu>
-        <transition mode="out-in">
-            <router-view></router-view>
+        <MainMenu/>
+        <transition  mode="out-in">
+            <router-view/>
         </transition>
 
     </div>
@@ -17,6 +17,17 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #415040;
+    }
+
+    .slide-enter-active,
+    .slide-leave-active{
+        transition: opacity 1s, transform 1s;
+    }
+
+    .slide-enter,
+    .slide-leave-to{
+        opacity: 0;
+        transform: translateX(-30%);
     }
 
 

@@ -156,11 +156,19 @@ const store = new Vuex.Store({
             console.log("refreshCourseTableIsOn");
             for (let i = 0; i < state.courses.length; i++) {
                 if (state.courses[i].Progress >= 100) {
-                    console.log("Dojechala")
+                    console.log("Dojechala");
                     state.finishedCourses.push(state.courses[i]);
-                    state.courses.splice(i, 1)
-                    // Zmienic Available dla ID Ciezarowki
-                } else {
+                    axios.post("http://localhost:8080/session/player/changeAvailabilityToTrue",
+                        {
+                            selectedTruckId: state.courses[i].nr_Pojazdu,
+                            rewardCash:  state.orders[state.courses[i].nr_Zlecenia].Wynagrodzenie
+
+                        },
+                        {withCredentials: true});
+                    state.courses.splice(i, 1);
+
+
+                }else {
                     setTimeout(() => {
                         state.courses[i].Progress++;
                         const params = new URLSearchParams([['id', state.courses[i].ID], ['progress', state.courses[i].Progress]]);

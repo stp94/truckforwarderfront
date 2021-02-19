@@ -26,17 +26,17 @@
                     <a href="">Reakcja:</a><br/>
                     <a href="">
                         <b-progress :value="this.$store.state.playerDetails[0].playerSpeed" :max="100" class="mb-3"
-                                    show-value show-progress animated></b-progress>
+                                    show-value show-progress animated/>
                     </a><br/>
                     <a href="">Odpowiedzialność:</a><br/>
                     <a href="">
                         <b-progress :value="this.$store.state.playerDetails[0].playerResponsibility" :max="100"
-                                    class="mb-3" show-value show-progress animated></b-progress>
+                                    class="mb-3" show-value show-progress animated/>
                     </a><br/>
                     <a href="">Szacunek:</a><br/>
                     <a href="">
                         <b-progress :value="this.$store.state.playerDetails[0].playerRespect" :max="100" class="mb-3"
-                                    show-value show-progress animated></b-progress>
+                                    show-value show-progress animated/>
                     </a><br/>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                                     <b-list-group-item> {{item.Cel}}</b-list-group-item>
                                     <b-list-group-item class="bar">
                                         <b-progress height="2rem" :value="item.Progress" show-progress
-                                                    class="w-100"></b-progress>
+                                                    class="w-100"/>
                                     </b-list-group-item>
                                 </b-list-group>
                             </ul>
@@ -108,6 +108,7 @@
 
         mounted() {
             this.$store.commit('update_courses');
+            this.$store.commit('update_playerDetails');
             this.timer = setInterval(document.getElementsById("currentCourses").window.location.reload, 1000);
         }
     }

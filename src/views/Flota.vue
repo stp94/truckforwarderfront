@@ -5,8 +5,8 @@
             <div>
                 <b-table class="TrucksTable" selectable responsive="true" striped hover :items="trucksTableBought" :fields="trucksTableBoughtFields" @row-clicked="onRowSelected"> Error Element
                     <template #cell(Status)="itemRow">
-                        <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
-                        <i v-else class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
+                        <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
+                        <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
                     </template>
                     <template #cell(.)="itemRow">
                         <img v-if="itemRow.item.Typ==='Plandeka'" src="http://localhost:8081/trucktilt.png" class="iconTruckTable">
