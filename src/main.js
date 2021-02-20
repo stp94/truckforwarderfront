@@ -14,7 +14,7 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 
 import router from './router'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuex);
@@ -158,6 +158,7 @@ const store = new Vuex.Store({
                 if (state.courses[i].Progress >= 100) {
                     console.log("Dojechala");
                     state.finishedCourses.push(state.courses[i]);
+                    state.playerDetails[0].playerCash += state.orders[state.courses[i].nr_Zlecenia].Wynagrodzenie;
                     axios.post("http://localhost:8080/session/player/changeAvailabilityToTrue",
                         {
                             selectedTruckId: state.courses[i].nr_Pojazdu,
@@ -175,7 +176,10 @@ const store = new Vuex.Store({
                         axios.get('http://localhost:8080/session/course/update_progress', {
                             params,
                             withCredentials: true
-                        })
+                        });
+                            if(state.courses[i].Progress==10){
+                                console.log("Podaj zdarzenie")
+                            }
                     }, state.courses[i].Czas * 50);
                     console.log(state.courses[i].ID, " : ", state.courses[i].Progress)
                 }
@@ -200,4 +204,4 @@ new Vue({
     router,
     store,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

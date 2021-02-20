@@ -3,75 +3,71 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
-                    <img src="@/assets/call-center-worker.png" alt=""/>
+                    <img src="@/assets/call-center-worker.png"/>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="profile-head">
-                    <h5>
-                        {{this.$store.state.playerDetails[0].playerName}}
-                    </h5>
-                    <h6>
-                        Twoje fundusze: {{this.$store.state.playerDetails[0].playerCash}}
-                    </h6>
+                    <h5>{{playerDetails.playerName}}</h5>
+                    <h6>Twoje fundusze: {{ playerDetails.playerCash }}</h6>
                     <p class="proile-rating">RANKINGS : <span>8/10</span></p>
                 </div>
             </div>
-
         </div>
-        <div class="row">
+        <div class="row">n
             <div class="col-md-4">
                 <div class="profile-work">
                     <p>Umiejętności</p>
                     <a href="">Reakcja:</a><br/>
                     <a href="">
-                        <b-progress :value="this.$store.state.playerDetails[0].playerSpeed" :max="100" class="mb-3"
-                                    show-value show-progress animated/>
+                        <b-progress :max="100" :value="playerDetails.playerSpeed" animated
+                                    class="mb-3" show-progress show-value/>
                     </a><br/>
                     <a href="">Odpowiedzialność:</a><br/>
                     <a href="">
-                        <b-progress :value="this.$store.state.playerDetails[0].playerResponsibility" :max="100"
-                                    class="mb-3" show-value show-progress animated/>
+                        <b-progress :max="100" :value="playerDetails.playerResponsibility"
+                                    animated class="mb-3" show-progress show-value/>
                     </a><br/>
                     <a href="">Szacunek:</a><br/>
                     <a href="">
-                        <b-progress :value="this.$store.state.playerDetails[0].playerRespect" :max="100" class="mb-3"
-                                    show-value show-progress animated/>
+                        <b-progress :max="100" :value="playerDetails.playerRespect" animated
+                                    class="mb-3" show-progress show-value/>
                     </a><br/>
                 </div>
             </div>
 
             <div class="col-md-6">
-
-                <div id="tabs" class="container">
+                <div class="container" id="tabs">
                     <div class="tabs">
-                        <b-button class="tabButton" v-on:click="activetab=1"
-                                  v-bind:class="[ activetab === 1 ? 'active' : '' ]">Aktualne kursy
+                        <b-button class="tabButton" v-bind:class="[ activetab === 1 ? 'active' : '' ]"
+                                  v-on:click="activetab=1">Aktualne kursy
                         </b-button>
-                        <b-button class="tabButton" v-on:click="activetab=2"
-                                  v-bind:class="[ activetab === 2 ? 'active' : '' ]">Ukończone kursy
+                        <b-button class="tabButton" v-bind:class="[ activetab === 2 ? 'active' : '' ]"
+                                  v-on:click="activetab=2">Ukończone kursy
                         </b-button>
                     </div>
                     <div class="content">
-                        <div v-if="activetab === 1" class="tabcontent">
+                        <div class="tabcontent" v-if="activetab === 1">
                             <ul class="courses-list">
-                                <b-list-group horizontal class="courses-list-element" id="currentCourses"
-                                              v-for="item in this.$store.state.courses" :key="item.ID">
+                                <b-list-group :key="item.ID" class="courses-list-element" horizontal
+                                              id="currentCourses" v-for="item in this.$store.state.courses">
                                     <b-list-group-item> {{item.ID}}</b-list-group-item>
                                     <b-list-group-item> {{item.Zrodlo}}</b-list-group-item>
                                     <b-list-group-item> {{item.Cel}}</b-list-group-item>
                                     <b-list-group-item class="bar">
-                                        <b-progress height="2rem" :value="item.Progress" show-progress
-                                                    class="w-100"/>
+                                        <b-progress :value="item.Progress" class="w-100" height="2rem" id="progressBar"
+                                                    show-progress>
+
+                                        </b-progress>
                                     </b-list-group-item>
                                 </b-list-group>
                             </ul>
 
                         </div>
-                        <div v-if="activetab === 2" class="tabcontent">
+                        <div class="tabcontent" v-if="activetab === 2">
                             <ul class="courses-list">
-                                <b-list-group horizontal class="courses-list-element"
-                                              v-for="item in this.$store.state.finishedCourses" :key="item.ID">
+                                <b-list-group :key="item.ID" class="courses-list-element"
+                                              horizontal v-for="item in this.$store.state.finishedCourses">
                                     <b-list-group-item> {{item.ID}}</b-list-group-item>
                                     <b-list-group-item> {{item.Zrodlo}}</b-list-group-item>
                                     <b-list-group-item> {{item.Cel}}</b-list-group-item>
@@ -79,11 +75,34 @@
                                 </b-list-group>
                             </ul>
                         </div>
+
+
+
+
                     </div>
                 </div>
             </div>
+
+
+                    <b-alert
+                            :show="dismissCountDown"
+                            @dismiss-count-down="countDownChanged"
+                            @dismissed="dismissCountDown=0"
+                            dismissible
+                            variant="warning"
+                    >
+                        <p>This alert will dismiss after {{ dismissCountDown }} seconds...</p>
+                        <b-progress
+                                :max="dismissSecs"
+                                :value="dismissCountDown"
+                                height="4px"
+                                variant="warning"
+                        />
+                    </b-alert>
+            </div>
+
         </div>
-    </div>
+
 </template>
 
 <script>
@@ -94,22 +113,52 @@
         data() {
             return {
                 activetab: 1,
-                timer: '',
+                dismissSecs: 39,
+                dismissCountDown: 5,
+                showDismissibleAlert: false
             }
         },
-        create() {
-            this.generateProgressBars();
-        },
+
         method: {
             showUnfinished() {
                 document.getElementById("courses-list").setAttribute("display", "none");
             },
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown
+            },
+            showAlert() {
+                this.dismissCountDown = this.dismissSecs
+            }
         },
 
         mounted() {
             this.$store.commit('update_courses');
             this.$store.commit('update_playerDetails');
             this.timer = setInterval(document.getElementsById("currentCourses").window.location.reload, 1000);
+
+        },
+
+        computed: {
+            playerDetails: function () {
+                return this.$store.state.playerDetails[0];
+            },
+
+            courses: function () {
+                return this.$store.state.courses;
+            },
+
+            alertGenerate: function(){
+                let flag = false;
+
+                if (document.getElementById("progressBar").getAttribute("valuenow") == 10 ){
+                    flag = true;
+                }
+                this.showAlert();
+                console.log("jest alert");
+
+
+                return flag;
+            }
         }
     }
 </script>

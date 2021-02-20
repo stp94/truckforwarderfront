@@ -1,16 +1,28 @@
 <template>
     <div>
-        <b-table class="OrdersTable" selectable responsive="true" stacked="md" striped hover :items="orderTable" :sticky-header="orderTableFields"
+        <b-table class="OrdersTable" fixed selectable responsive="true" stacked="md" striped hover :items="orderTable2" :sticky-header="orderTableFields"
                  :fields="orderTableFields" @row-clicked="onRowSelected">
         </b-table>
         <div>
             <b-modal ref="my-modal" hide-footer title="Wybierz pojazd">
                 <div class="d-block text-center">
                     Zlecenie nr: {{selectedOrder.ID}} <br>
-                    {{selectedOrder.Poczatek}} -> {{selectedOrder.Koniec}}
+                               <b>{{selectedOrder.Poczatek}}</b> -> <b>{{selectedOrder.Koniec}}</b><br>
+                    Dane techniczne towaru: <br>
+                    Ilosc:     <b>{{selectedOrder.Ilosc}}</b> <br>
+                    Rodzaj:    <b>{{selectedOrder.Rodzaj}}</b> <br>
+                    <p v-if="selectedOrder.Dlugosc !== 0">
+                    Dlugosc:   <b>{{selectedOrder.Dlugosc}}m</b> <br>
+                    Szerokosc: <b>{{selectedOrder.Szerokosc}}m</b> <br>
+                    Wysokosc:  <b>{{selectedOrder.Wysokosc}}m</b> <br>
+                    Waga:      <b>{{selectedOrder.Waga}}kg</b> <br>
+                    </p>
+                    <p v-if="selectedOrder.Pojemnosc !== 0">Pojemnosc: {{selectedOrder.Pojemnosc}}</p><br>
                 </div>
-                <b-table class="TrucksTable" selectable responsive="true"  striped hover :items="filteredTrucksToOrders"
-                         :fields="filteredTrucksToOrdersFields" @row-clicked="onRowSelectedTruck"> Error Element
+                <b-table class="TrucksTable" selectable responsive="true" striped hover
+                         :items="filteredTrucksToOrders"
+                         :fields="filteredTrucksToOrdersFields"
+                         @row-clicked="onRowSelectedTruck"> Error Element
                     <template #cell(Status)="itemRow">
                         <i v-if="itemRow.item.Dostepnosc" class="material-icons" style="font-size: 20px;color: green">fiber_manual_record</i>
                         <i v-else class="material-icons" style="font-size: 20px;color: red">fiber_manual_record</i>
@@ -28,13 +40,12 @@
                              class="iconTruckTable" alt="no_image">
                     </template>
                 </b-table>
-                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Anuluj</b-button>
+                <b-button class="mt-3" variant="outline-danger" block
+                          @click="hideModal">Anuluj</b-button>
                 <b-button v-if="filteredTrucksToOrders.length>0" class="mt-2" variant="outline-warning" block
-                          @click="toggleModalStartMission">Rozpocznij
-                </b-button>
-                <b-button v-else class="mt-2" variant="outline-warning" block @click="toggleModalEmpty">Brak
-                    odpowiednich pojazdow
-                </b-button>
+                          @click="toggleModalStartMission">Rozpocznij</b-button>
+                <b-button v-else class="mt-2" variant="outline-warning" block
+                          @click="toggleModalEmpty">Brak odpowiednich pojazdow</b-button>
             </b-modal>
         </div>
     </div>
@@ -50,20 +61,19 @@
             return {
                 BoughtTrucks: [],
                 selectedOrder: [],
-                orderTable: [],
+
                 orderTableFields: [
-                    {key: "ID", sortable: true, isRowHeader:true, stickyColumn: true}, {key: "Poczatek", sortable: true},
-                    {key: "Koniec", sortable: true}, {key: "Odleglosc", sortable: true},
-                    {key: "Opis", sortable: true}, {key: "Klient", sortable: true}, {
-                        key: "Wynagrodzenie",
-                        sortable: true
-                    },
-                    {key: "Rodzaj", sortable: true}, {key: "Ilosc", sortable: true},
-                    {key: "Dlugosc", sortable: true}, {key: "Szerokosc", sortable: true},
-                    {key: "Wysokosc", sortable: true}, {key: "Waga", sortable: true}, {
-                        key: "Pojemnosc",
-                        sortable: true
-                    }],
+                    {key: "ID", sortable: true, isRowHeader:true, stickyColumn: true},
+                    {key: "Poczatek", sortable: true},
+                    {key: "Koniec", sortable: true},
+                    {key: "Odleglosc", sortable: true},
+                    {key: "Opis", sortable: true},
+                    {key: "Klient", sortable: true},
+                    {key: "Wynagrodzenie", sortable: true},
+                    {key: "Rodzaj", sortable: true},
+                    {key: "Ilosc", sortable: true},
+
+                ],
                 filteredTrucksToOrdersFields: [
                     {key: "ID"},
                     {key: "Typ"},
@@ -77,7 +87,7 @@
         mounted() {
             this.$store.commit('update_orders');
             this.$store.commit('update_availableTrucks');
-            this.orderTable = this.$store.state.orders;
+
         },
         methods: {
             onRowSelected(orderTable) {
@@ -86,8 +96,19 @@
                 this.filteredTrucksToOrders = [];
                 for (let i = 0; i < this.$store.state.trucksTableBought.length; i++) {
                     if (
-                        (this.selectedOrder.Rodzaj !== "liquid" && this.selectedOrder.Ilosc * this.selectedOrder.Dlugosc <= this.$store.state.trucksTableBought[i].Dlugosc && this.selectedOrder.Wysokosc <= this.$store.state.trucksTableBought[i].Wysokosc && this.selectedOrder.Waga <= this.$store.state.trucksTableBought[i].Waga) ||
-                        (this.selectedOrder.Rodzaj !== "liquid" && this.selectedOrder.Ilosc / 2 * this.selectedOrder.Dlugosc <= this.$store.state.trucksTableBought[i].Dlugosc && this.selectedOrder.Wysokosc * 2 <= this.$store.state.trucksTableBought[i].Wysokosc && this.selectedOrder.Waga <= this.$store.state.trucksTableBought[i].Waga)
+                        (this.selectedOrder.Rodzaj !== "liquid" &&
+                            this.selectedOrder.Ilosc * this.selectedOrder.Dlugosc <=
+                            this.$store.state.trucksTableBought[i].Dlugosc &&
+                            this.selectedOrder.Wysokosc <=
+                            this.$store.state.trucksTableBought[i].Wysokosc &&
+                            this.selectedOrder.Waga <= this.$store.state.trucksTableBought[i].Waga) ||
+                        (this.selectedOrder.Rodzaj !== "liquid" &&
+                            this.selectedOrder.Ilosc / 2 * this.selectedOrder.Dlugosc <=
+                            this.$store.state.trucksTableBought[i].Dlugosc &&
+                            this.selectedOrder.Wysokosc * 2 <=
+                            this.$store.state.trucksTableBought[i].Wysokosc &&
+                            this.selectedOrder.Waga <=
+                            this.$store.state.trucksTableBought[i].Waga)
                     ) {
                         this.filteredTrucksToOrders.push({
                             ID: this.$store.state.trucksTableBought[i].ID,
@@ -104,15 +125,11 @@
             },
             onRowSelectedTruck(filteredTrucksToOrders) {
                 this.selectedTruck = filteredTrucksToOrders;
-                console.log(this.selectedTruck);
             },
             toggleModalStartMission() {
-                console.log(this.selectedTruck.Dostepnosc)
+                console.log(this.selectedTruck.Dostepnosc);
                 if (this.selectedTruck.Dostepnosc == true) {
                     this.$refs['my-modal'].hide();
-                    console.log(this.selectedTruck.ID);
-                    console.log(this.selectedOrder.ID);
-                    console.log(this.selectedOrder.Odleglosc)
                     axios.post("http://localhost:8080/session/course/new",
                         {
                             selectedOrderId: this.selectedOrder.ID,
@@ -127,6 +144,7 @@
                         },
                         {withCredentials: true});
                     this.$store.commit('refreshCourseTable');
+                    this.$store.state.orders.slice(this.selectedOrder.ID,1);
                     this.$toast.open("Transport rozpoczety");
                 } else (this.$toast.warning("Pojazd zajety!"))
             },
@@ -137,6 +155,13 @@
                 this.$refs['my-modal'].hide()
             }
         },
+        computed: {
+            orderTable2: function () {
+                return this.$store.state.orders;
+            },
+
+    }
+
     }
 </script>
 
@@ -150,6 +175,10 @@
         background: #fff;
 
 
+    }
+
+    .d-block text-center{
+        background-color: #00c6ff!important;
     }
 
     .iconTruckTable {
