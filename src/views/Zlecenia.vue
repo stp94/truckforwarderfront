@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-table class="OrdersTable" fixed selectable responsive="true" stacked="md" striped hover :items="orderTable2" :sticky-header="orderTableFields"
+        <b-table class="OrdersTable" selectable    striped hover :items="orderTable2" :sticky-header="orderTableFields"
                  :fields="orderTableFields" @row-clicked="onRowSelected">
         </b-table>
         <div>
@@ -109,14 +109,14 @@
                             this.$store.state.trucksTableBought[i].Wysokosc &&
                             this.selectedOrder.Waga <=
                             this.$store.state.trucksTableBought[i].Waga)
-                    ) {
-                        this.filteredTrucksToOrders.push({
+                    )
+                       { this.filteredTrucksToOrders.push({
                             ID: this.$store.state.trucksTableBought[i].ID,
                             Typ: this.$store.state.trucksTableBought[i].Typ,
                             Stan: this.$store.state.trucksTableBought[i].Stan,
                             Dostepnosc: this.$store.state.trucksTableBought[i].Dostepnosc
-                        })
-                    }
+                          })
+                        }
                 }
                 this.$refs['my-modal'].show();
                 if (this.filteredTrucksToOrders.length === 0) {
@@ -127,7 +127,6 @@
                 this.selectedTruck = filteredTrucksToOrders;
             },
             toggleModalStartMission() {
-                console.log(this.selectedTruck.Dostepnosc);
                 if (this.selectedTruck.Dostepnosc == true) {
                     this.$refs['my-modal'].hide();
                     axios.post("http://localhost:8080/session/course/new",
@@ -167,19 +166,18 @@
 
 <style scoped>
 
+
+
     .OrdersTable {
         padding: 3%;
         margin-top: 3%;
         margin-bottom: 3%;
         border-radius: 0.5rem;
         background: #fff;
-
-
+        background-color: red;
     }
 
-    .d-block text-center{
-        background-color: #00c6ff!important;
-    }
+
 
     .iconTruckTable {
         padding: 1%;
@@ -198,6 +196,4 @@
         max-width: 100%;
         max-height: 100%;
     }
-
-
 </style>
