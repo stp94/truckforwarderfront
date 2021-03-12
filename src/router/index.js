@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies';
 
+import Panel from "@/views/Panel"
 import Flota from "@/views/Flota";
 import Dealer from "@/views/Dealer";
 import Bank from "@/views/Bank";
@@ -27,18 +28,21 @@ Vue.use(VueRouter, VueCookies, Vuex);
     {
       path: '/panel',
       name: 'Panel',
-      component: () => import(/* webpackChunkName: "panel" */ '../views/Panel.vue')
+      component: Panel,
+      meta: {requiresAuth: true}
     },
 
     {
       path: '/flota',
       name: 'Flota',
-      component: Flota
+      component: Flota,
+      meta: {requiresAuth: true}
     },
     {
       path: '/zlecenia',
       name: 'Zlecenia',
-      component: Zlecenia
+      component: Zlecenia,
+      meta: {requiresAuth: true}
     },
     {
       path: '/dealer',
@@ -67,6 +71,7 @@ Vue.use(VueRouter, VueCookies, Vuex);
       name: 'Account',
       component: Account
     },
+
   ];
 
 
@@ -74,6 +79,22 @@ Vue.use(VueRouter, VueCookies, Vuex);
 const router = new VueRouter({
   routes
 });
+
+// router.beforeEach((to, from, next) => {
+//   const publicPages = ['/login', '/register'];
+//   const authRequired = !publicPages.includes(to.path);
+//   //const loggedIn = localStorage.getItem('user')
+//   const loggedIn = this.$cookies.get("JSESSION");
+//   console.log(loggedIn);
+//
+//   if (authRequired && !loggedIn){
+//     return next('login');
+//   }
+//
+//   next();
+//
+//
+// });
 
 
 

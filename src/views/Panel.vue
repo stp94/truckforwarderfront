@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">n
+        <div class="row">
             <div class="col-md-4">
                 <div class="profile-work">
                     <p>Umiejętności</p>
@@ -34,6 +34,7 @@
                                     class="mb-3" show-progress show-value/>
                     </a><br/>
                 </div>
+
             </div>
 
             <div class="col-md-6">
@@ -57,6 +58,9 @@
                                     <b-list-group-item class="bar">
                                         <b-progress :value="item.Progress" class="w-100" height="2rem" id="progressBar"
                                                     show-progress>
+                                                <div v-if="item.Progress==Math.floor(Math.random() * (100 - 1 + 1)) + 1">
+                                                    {{showDismissibleAlert=true}}
+                                                </div>
 
                                         </b-progress>
                                     </b-list-group-item>
@@ -75,31 +79,31 @@
                                 </b-list-group>
                             </ul>
                         </div>
-
-
-
-
                     </div>
                 </div>
             </div>
 
 
-                    <b-alert
-                            :show="dismissCountDown"
-                            @dismiss-count-down="countDownChanged"
-                            @dismissed="dismissCountDown=0"
-                            dismissible
-                            variant="warning"
-                    >
-                        <p>This alert will dismiss after {{ dismissCountDown }} seconds...</p>
-                        <b-progress
-                                :max="dismissSecs"
-                                :value="dismissCountDown"
-                                height="4px"
-                                variant="warning"
-                        />
-                    </b-alert>
+
             </div>
+        <div class="col-md-6">
+            <div class="col-md-8" id="alertIncident">
+                <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+                    <b-container>
+                     <b-row>  Dzwoni kierowca...  </b-row>
+                     <b-row> {{description}} </b-row>
+                        <b-row> <b-button class="answerButton"> {{answerA}} </b-button>  </b-row>
+                        <b-row> <b-button class="answerButton"> {{answerB}} </b-button>  </b-row>
+                        <b-row> <b-button class="answerButton"> {{answerC}} </b-button>  </b-row>
+                    </b-container>
+
+                </b-alert>
+
+            </div>
+
+        </div>
+
+            <b-button @click="showDismissibleAlert=true"></b-button>
 
         </div>
 
@@ -113,16 +117,15 @@
         data() {
             return {
                 activetab: 1,
-                dismissSecs: 39,
-                dismissCountDown: 5,
-                showDismissibleAlert: false
+                dismissSecs: 10,
+                dismissCountDown: 0,
+                showDismissibleAlert: false,
+
             }
         },
 
         method: {
-            showUnfinished() {
-                document.getElementById("courses-list").setAttribute("display", "none");
-            },
+
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown
             },
@@ -147,18 +150,20 @@
                 return this.$store.state.courses;
             },
 
-            alertGenerate: function(){
-                let flag = false;
+            description: function(){
+                return "Przykladowe pytanie, cos wydarzylo sie na drodze, co robic?"
+            },
 
-                if (document.getElementById("progressBar").getAttribute("valuenow") == 10 ){
-                    flag = true;
-                }
-                this.showAlert();
-                console.log("jest alert");
+                answerA: function(){
+                    return "Zrob jakas czynnosc";
+                },
+                answerB: function(){
+                    return "Zrob inna czynnosc"
+                },
+                answerC: function () {
+                    return "Zrob jeszcze inna czynnosc"
+                },
 
-
-                return flag;
-            }
         }
     }
 </script>
@@ -282,5 +287,30 @@
 
     }
 
+    .answerButton {
+        margin-left: 2%;
+
+
+    }
+
+    .fullscreenAlert{
+    position: absolute; top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #alertIncident:active{
+        animation: blink 0.02s 20 alternate;
+    }
+
+    @keyframes blink {
+        from { background-color: purple; }
+        to { background-color: red; }
+
+    }
+
+    .answer{
+        margin-left: 5%;
+    }
 
 </style>

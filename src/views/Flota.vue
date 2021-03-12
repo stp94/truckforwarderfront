@@ -3,7 +3,7 @@
 
         <div class="BoughtTrucksTable">
             <div>
-                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="trucksTableBought" :fields="trucksTableBoughtFields" @row-clicked="onRowSelected"> Error Element
+                <b-table class="TrucksTable" selectable responsive="true" striped hover :items="boughtTrucks" :fields="trucksTableBoughtFields" @row-clicked="onRowSelected"> Error Element
                     <template #cell(Status)="itemRow">
                         <i v-if="itemRow.item.Dostepnosc" class="material-icons"  style="font-size: 20px;color: green">fiber_manual_record</i>
                         <i v-else class="material-icons"  style="font-size: 20px;color: red">fiber_manual_record</i>
@@ -27,15 +27,19 @@
         data () {
             return {
                 selected: [],
-                trucksTableBought: [],
                 trucksTableBoughtFields:["ID","Typ",".","Stan","Status"],
                 statusTruck: "ee ",
             }
         },
         beforeMount () {
-            this.trucksTableBought = [];
             this.$store.commit('update_availableTrucks');
-            this.trucksTableBought = this.$store.state.trucksTableBought;
+        },
+
+
+        computed: {
+            boughtTrucks: function () {
+               return this.$store.state.trucksTableBought;
+            },
         }
     }
 </script>

@@ -1,21 +1,23 @@
 <template>
     <div>
-        <b-table class="OrdersTable" selectable    striped hover :items="orderTable2" :sticky-header="orderTableFields"
-                 :fields="orderTableFields" @row-clicked="onRowSelected">
-        </b-table>
+        <div>
+            <b-table class="OrdersTable" fixed selectable striped hover :items="orderTable2"
+                     :fields="orderTableFields" @row-clicked="onRowSelected">
+            </b-table>
+        </div>
         <div>
             <b-modal ref="my-modal" hide-footer title="Wybierz pojazd">
                 <div class="d-block text-center">
                     Zlecenie nr: {{selectedOrder.ID}} <br>
-                               <b>{{selectedOrder.Poczatek}}</b> -> <b>{{selectedOrder.Koniec}}</b><br>
+                    <b>{{selectedOrder.Poczatek}}</b> -> <b>{{selectedOrder.Koniec}}</b><br>
                     Dane techniczne towaru: <br>
                     Ilosc:     <b>{{selectedOrder.Ilosc}}</b> <br>
                     Rodzaj:    <b>{{selectedOrder.Rodzaj}}</b> <br>
                     <p v-if="selectedOrder.Dlugosc !== 0">
-                    Dlugosc:   <b>{{selectedOrder.Dlugosc}}m</b> <br>
-                    Szerokosc: <b>{{selectedOrder.Szerokosc}}m</b> <br>
-                    Wysokosc:  <b>{{selectedOrder.Wysokosc}}m</b> <br>
-                    Waga:      <b>{{selectedOrder.Waga}}kg</b> <br>
+                        Dlugosc:   <b>{{selectedOrder.Dlugosc}}m</b> <br>
+                        Szerokosc: <b>{{selectedOrder.Szerokosc}}m</b> <br>
+                        Wysokosc:  <b>{{selectedOrder.Wysokosc}}m</b> <br>
+                        Waga:      <b>{{selectedOrder.Waga}}kg</b> <br>
                     </p>
                     <p v-if="selectedOrder.Pojemnosc !== 0">Pojemnosc: {{selectedOrder.Pojemnosc}}</p><br>
                 </div>
@@ -48,6 +50,7 @@
                           @click="toggleModalEmpty">Brak odpowiednich pojazdow</b-button>
             </b-modal>
         </div>
+
     </div>
 </template>
 
@@ -173,8 +176,8 @@
         margin-top: 3%;
         margin-bottom: 3%;
         border-radius: 0.5rem;
-        background: #fff;
-        background-color: red;
+
+
     }
 
 

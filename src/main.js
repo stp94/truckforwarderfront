@@ -4,7 +4,7 @@ import App from './App.vue'
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import MenuIcon from 'vue-material-design-icons/Menu.vue'
 import VueToast from 'vue-toast-notification';
-
+import VueCookies from 'vue-cookies';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -19,6 +19,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuex);
 Vue.use(VueToast);
+Vue.use(VueCookies);
 Vue.component('menu-icon', MenuIcon, VueToast);
 
 import axios from 'axios';
