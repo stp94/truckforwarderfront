@@ -26,11 +26,14 @@ import axios from 'axios';
 
 const store = new Vuex.Store({
     state: {
+        callPause: false,
         trucksTableBought: [],
         orders: [],
         playerDetails: [],
         courses: [],
-        finishedCourses: []
+        finishedCourses: [],
+        incidents: [],
+        incidentFlag: false,
     },
     mutations: {
         update_availableTrucks(state) {
@@ -58,7 +61,6 @@ const store = new Vuex.Store({
                     console.log(error);
                 });
         },
-
         update_orders(state) {
             axios.get('http://localhost:8080/order/vieworders', {
                 withCredentials: true
@@ -154,6 +156,8 @@ const store = new Vuex.Store({
                 });
         },
         refreshCourseTable(state) {
+
+
             console.log("refreshCourseTableIsOn");
             for (let i = 0; i < state.courses.length; i++) {
                 if (state.courses[i].Progress >= 100) {
@@ -172,20 +176,57 @@ const store = new Vuex.Store({
 
                 }else {
                     setTimeout(() => {
-                        state.courses[i].Progress++;
-                        const params = new URLSearchParams([['id', state.courses[i].ID], ['progress', state.courses[i].Progress]]);
-                        axios.get('http://localhost:8080/session/course/update_progress', {
-                            params,
-                            withCredentials: true
-                        });
-                            if(state.courses[i].Progress==10){
-                                console.log("Podaj zdarzenie")
-                            }
+
+
+
+                            state.courses[i].Progress++;
+                            const params = new URLSearchParams([['id', state.courses[i].ID], ['progress', state.courses[i].Progress]]);
+                            axios.get('http://localhost:8080/session/course/update_progress', {
+                                params,
+                                withCredentials: true
+                            });
+
                     }, state.courses[i].Czas * 50);
                     console.log(state.courses[i].ID, " : ", state.courses[i].Progress)
                 }
             }
         },
+        update_incidents(state){
+            axios.get('http://localhost:8080/session/course/incidents', {
+                withCredentials: true
+            })
+                .then(response => {
+                    const data = response.data;
+                    state.incidents = [];
+                    for (let i = 0; i < data.length; i++) {
+                        state.incidents.push({
+                            ID: data[i].id,
+                            Question: data[i].question,
+                            Answer_a: data[i].answer_a,
+                            Answer_b: data[i].answer_b,
+                            Answer_c: data[i].answer_c,
+                            Speed_a: data[i].answer_a,
+                            Speed_b: data[i].answer_b,
+                            Speed_c: data[i].answer_c,
+                            Responsibility_a: data[i].speed_a,
+                            Responsibility_b: data[i].speed_b,
+                            Responsibility_c: data[i].speed_c,
+                            Respect_a: data[i].respect_a,
+                            Respect_b: data[i].respect_b,
+                            Respect_c: data[i].respect_c,
+                            Cash_a: data[i].cash_a,
+                            Cash_b: data[i].cash_b,
+                            Cash_c: data[i].cash_c,
+
+                        })
+                    }
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+
+        }
     },
     getters: {
         getAvailableTrucks() {

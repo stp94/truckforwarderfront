@@ -56,6 +56,7 @@
             this.$store.commit('update_courses');
             this.$store.commit('update_availableTrucks');
             this.$store.commit('update_orders');
+            this.$store.commit('update_incidents');
         },
         mounted() {
             this.timer = setInterval(this.refreshCourseTable, 1000);

@@ -17,7 +17,7 @@
                     <b-form-input class="input-form"
                             v-model="username"
                             placeholder="login"/>
-                    <b-form-input class="input-form"
+                    <b-form-input class="input-form" type="password"
                             v-model="password"
                             placeholder="haslo"/>
 <!--                <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0">Remember me</b-form-checkbox>-->
@@ -30,10 +30,10 @@
                     <b-form-input class="input-form"
                                   v-model="new_username"
                                   placeholder="login"/>
-                    <b-form-input class="input-form"
+                    <b-form-input class="input-form" type="password"
                                   v-model="new_password"
                                   placeholder="haslo"/>
-                    <b-form-input class="input-form"
+                    <b-form-input class="input-form"  type="password"
                                   v-model="new_confirmPassword"
                                   placeholder="potwierdz haslo"/>
                     <b-button variant="primary" class="login-button" v-on:click="registerPrincipal()">Zarejestruj</b-button>
@@ -52,6 +52,8 @@
         name: "Account",
         methods:{
             submitPrincipal: function(){
+                if(this.username!=="" && this.password!==""){
+
                 let url = new URL('http://localhost:8080/login');
                 let params = new URLSearchParams(url.search.slice(1));
                 params.append('username',this.username);
@@ -75,30 +77,32 @@
                         }
                         console.log(error.response.status);
                      })
+                }
 
             },
             registerPrincipal: function() {
-                console.log(this.$cookies.get("JSESSIONID"));
 
-                let url = new URL('http://localhost:8080/register');
-                let params = new URLSearchParams(url.search.slice(1));
-                params.append('username',this.new_username);
-                params.set('password',this.new_password);
-                axios.post('http://localhost:8080/register',params,{
-
-                    headers:  { 'Content-Type': 'application/x-www-form-urlencoded'}
-
-                }).then(response=> {
-
-                    if(response.status==200){
-                        this.$toast.success("Zarejestrowane konto. Mozesz sie zalogowac")
-                    }
-                })
-                    .catch(error => {
-                        if(error.response.status==500){
-                            this.$toast.warning("Login zajety. Wybierz inny")
+                if (this.new_username!="" && this.new_password==this.new_confirmPassword){
+                    let url = new URL('http://localhost:8080/register');
+                    let params = new URLSearchParams(url.search.slice(1));
+                    params.append('username',this.new_username);
+                    params.set('password',this.new_password);
+                    axios.post('http://localhost:8080/register',params,{
+                        headers:  { 'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(response=> {
+                        if(response.status==200){
+                            this.$toast.success("Zarejestrowane konto. Mozesz sie zalogowac")
                         }
                     })
+                        .catch(error => {
+                            if(error.response.status==500){
+                                this.$toast.warning("Login zajety. Wybierz inny")
+                            }
+                        })
+                }
+                else {
+                    this.$toast.warning("Wprowadz poprawne dane")
+                }
 
             },
 

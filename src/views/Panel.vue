@@ -1,5 +1,6 @@
 <template>
     <div class="container emp-profile">
+
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
@@ -10,7 +11,7 @@
                 <div class="profile-head">
                     <h5>{{playerDetails.playerName}}</h5>
                     <h6>Twoje fundusze: {{ playerDetails.playerCash }}</h6>
-                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+
                 </div>
             </div>
         </div>
@@ -56,11 +57,11 @@
                                     <b-list-group-item> {{item.Zrodlo}}</b-list-group-item>
                                     <b-list-group-item> {{item.Cel}}</b-list-group-item>
                                     <b-list-group-item class="bar">
-                                        <b-progress :value="item.Progress" class="w-100" height="2rem" id="progressBar"
+                                        <b-progress :value="item.Progress" lass="w-100" height="2rem" id="progressBar"
                                                     show-progress>
-                                                <div v-if="item.Progress==Math.floor(Math.random() * (100 - 1 + 1)) + 1">
-                                                    {{showDismissibleAlert=true}}
-                                                </div>
+                                            <div v-if="item.Progress==5">
+                                                {{$bvModal.show('callModal')}}
+                                            </div>
 
                                         </b-progress>
                                     </b-list-group-item>
@@ -86,31 +87,29 @@
 
 
             </div>
-        <div class="col-md-6">
-            <div class="col-md-8" id="alertIncident">
-                <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+
+
+
+            <b-modal id="callModal" ref="callModal"  class="popup_box">
+                <div>
                     <b-container>
-                     <b-row>  Dzwoni kierowca...  </b-row>
-                     <b-row> {{description}} </b-row>
-                        <b-row> <b-button class="answerButton"> {{answerA}} </b-button>  </b-row>
-                        <b-row> <b-button class="answerButton"> {{answerB}} </b-button>  </b-row>
-                        <b-row> <b-button class="answerButton"> {{answerC}} </b-button>  </b-row>
+                        <b-row> {{incidents.ID}}</b-row>
+                        <b-row> {{incidents.Question}} </b-row>
+                        <b-row> <b-button class="answerButton" @click="sendAnswer(1)"> {{incidents.Answer_a}}  </b-button>  </b-row>
+                        <b-row> <b-button class="answerButton" @click="sendAnswer(2)"> {{incidents.Answer_b}} </b-button>  </b-row>
+                        <b-row> <b-button class="answerButton" @click="sendAnswer(3)"> {{incidents.Answer_c}} </b-button>  </b-row>
                     </b-container>
 
-                </b-alert>
+                </div>
 
-            </div>
-
-        </div>
-
-            <b-button @click="showDismissibleAlert=true"></b-button>
+            </b-modal>
 
         </div>
 
 </template>
 
 <script>
-
+    import axios from "axios";
 
     export default {
         name: 'Panel',
@@ -120,23 +119,48 @@
                 dismissSecs: 10,
                 dismissCountDown: 0,
                 showDismissibleAlert: false,
+                progress: 0,
+
+
 
             }
         },
 
-        method: {
+        methods: {
 
             countDownChanged(dismissCountDown) {
                 this.dismissCountDown = dismissCountDown
             },
             showAlert() {
                 this.dismissCountDown = this.dismissSecs
+            },
+            showModal(){
+                    this.$refs['callModal'].show();
+                    this.$store.state.callPause=true;
+                    console.log("modalmodal")
+
+
+            },
+
+            sendAnswer(answer){
+                axios.post("http://localhost:8080/session/course/incidents/answer",{
+                        ID: this.incidents.ID,
+                        answer: answer
+                        },
+                    {withCredentials: true}
+                );
+                this.$store.commit('update_playerDetails');
+                this.$refs['callModal'].hide();
             }
+
         },
 
         mounted() {
+
+
             this.$store.commit('update_courses');
             this.$store.commit('update_playerDetails');
+            this.$store.commit('update_incidents');
             this.timer = setInterval(document.getElementsById("currentCourses").window.location.reload, 1000);
 
         },
@@ -150,19 +174,14 @@
                 return this.$store.state.courses;
             },
 
-            description: function(){
-                return "Przykladowe pytanie, cos wydarzylo sie na drodze, co robic?"
+            incidents: function(){
+                return this.$store.state.incidents[0];
             },
 
-                answerA: function(){
-                    return "Zrob jakas czynnosc";
-                },
-                answerB: function(){
-                    return "Zrob inna czynnosc"
-                },
-                answerC: function () {
-                    return "Zrob jeszcze inna czynnosc"
-                },
+            incidentFlag: function(){
+
+                return this.$store.state.incidentFlag;
+            }
 
         }
     }
@@ -309,8 +328,33 @@
 
     }
 
+    .callWindow{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 50%;
+        height: 50%;
+        /* bring your own prefixes */
+        transform: translate(-50%, -50%);
+
+    }
+
     .answer{
         margin-left: 5%;
+    }
+
+    .answerButton{
+        margin: 0.5%;
+    }
+
+    .popup_box
+    {
+
+        position:relative;
+        top: 0%;
+        left: 0%;
+
+
     }
 
 </style>
